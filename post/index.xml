@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on joshforb.es</title>
+    <link>https://joshforb.es/post/</link>
+    <description>Recent content in Posts on joshforb.es</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 26 Apr 2017 21:43:12 -0400</lastBuildDate>
+    
+	<atom:link href="https://joshforb.es/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Persisting Polymorphism</title>
+      <link>https://joshforb.es/post/persisting-polymorphism/</link>
+      <pubDate>Wed, 26 Apr 2017 21:43:12 -0400</pubDate>
+      
+      <guid>https://joshforb.es/post/persisting-polymorphism/</guid>
+      <description>Recently I worked on a project where a users choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed, etc).</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,117 @@
+	<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.20.5" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  
+  <title>Persisting Polymorphism &middot; joshforb.es</title>
+  
+
+  
+  <link rel="stylesheet" href="https://joshforb.es/css/poole.css">
+  <link rel="stylesheet" href="https://joshforb.es/css/syntax.css">
+  <link rel="stylesheet" href="https://joshforb.es/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link href="/css/prism.css" rel="stylesheet" />
+  <link href="/css/overrides.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="joshforb.es" />
+
+  <script src="/js/prism.js"></script>
+
+</head>
+
+	<body class=" ">
+		<div class="sidebar">
+    <div class="container sidebar-sticky">
+        <div class="sidebar-about">
+            <a href="https://joshforb.es/"><h1>joshforb.es</h1></a>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li><a href="/">home</a> </li>
+            
+            <li><a href="https://github.com/joshforbes"> github </a></li>
+            
+            <li><a href="https://twitter.com/forbesdeveloper"> twitter </a></li>
+            
+        </ul>
+    </div>
+</div>
+
+
+		<div class="content container">
+			<div class="post">
+			 	<h1>Persisting Polymorphism</h1>
+			  <span class="post-date">Wed, Apr 26, 2017</span>
+			      <p>Recently I worked on a project where a users choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed, etc).  For example: when a job credit job is changed from draft status to open status the system has to verify that a credit is available and then use the credit on the job, but a daily rate job would charge the users credit card.</p>
+
+<p>You can imagine how this could lead to some pretty nasty code:</p>
+
+<pre><code class="language-javascript">public function open()
+{
+	if ($this-&gt;publishable_type === 'credit') {
+        // verify credit is available and anything else that 			
+        // needs to be done before a credit job is opened
+    } elseif ($this-&gt;publishable_type === 'daily) {
+        // charge credit card or anything that needs to be
+        // done before a daily job is opened
+    } elseif ($this-&gt;publishable_type === 'plan' {
+        // an elseif for any other types
+    }
+
+	// code that has to be executed when a job is opened
+	// regardless of which publishable type is chosen
+
+	if ($this-&gt;publishable_type === 'credit') {
+		// assign credit to job
+	} elseif ($this-&gt;publishable_type === 'daily) {
+		// whatever needs to be done for daily job
+	} elseif ($this-&gt;publishable_type === 'plan' {
+		// an elseif for any other types
+	}
+}
+</code></pre>
+
+<p>This implementation would result in the <code>open()</code> method being modified anytime a new publishable type is added. Similar methods would have to exist for the other job status changes as well. Not a maintainable approach. If we could abstract the behavior for each of the types into their own classes this method could be significantly cleaned. Consider if the open method could look like this instead:</p>
+
+<pre><code class="language-javascript">public function open()
+{
+	$this-&gt;publishableType()-&gt;beforeOpen();
+
+	// code that has to be executed when a job is opened
+	// regardless of which publishable type is chosen
+
+	$this-&gt;publishableType()-&gt;afterOpen();
+}
+</code></pre>
+
+<p>Much nicer.</p>
+
+<p>To make this work the <code>publishableType()</code> method needs to return a new instance of the type class.  We can take a cue from Laravel’s polymorphic relationships and save the namespace of the type class to a <code>publishable_type</code> column on the job table. Meaning that the column would contain something along the lines of: <code>App\Daily</code>, <code>App\Credit</code> or <code>App\Whatever</code>.  The <code>publishableType()</code> implementation looks like:</p>
+
+<pre><code class="language-javascript">public function publishableType()
+{
+	return new $this-&gt;publishable_type($this);
+}
+</code></pre>
+
+<p>And that is it. As long as each publishable type implements the same interface then changing the behavior of a job is a simple as persisting a different publishable type to the database.</p>
+
+			</div>
+
+			
+		</div>
+
+  </body>
+</html>
