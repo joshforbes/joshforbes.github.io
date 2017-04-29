@@ -9,7 +9,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@forbesdeveloper" />
     <meta name="twitter:title" content="Persisting Polymorphism" />
-    <meta name="twitter:description" content="Recently I worked on a project where a users choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed)." />
+    <meta name="twitter:description" content="Recently I worked on a project where a user&rsquo;s choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed)." />
     <meta name="twitter:url" content="https://joshforb.es/post/persisting-polymorphism/" />
   
 
@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="https://joshforb.es/css/hyde.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link href="/css/prism.css" rel="stylesheet" />
+  <link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
   <link href="/css/overrides.css" rel="stylesheet" />
 
   
@@ -60,13 +61,13 @@
 
         <div class="content container">
             <div class="post">
-                <h1>Persisting Polymorphism</h1>
-                <span class="post-date">Wed, Apr 26, 2017</span>
-                <p>Recently I worked on a project where a users choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed). For example: when a job credit job is changed from draft status to open status the system has to verify that a credit is available and then use the credit on the job, but a daily rate job would instead charge the users credit card.</p>
+                <h1 class="post-title">Persisting Polymorphism</h1>
+                <span class="post-date">Mon, May 1, 2017</span>
+                <p>Recently I worked on a project where a user&rsquo;s choice needed to permanently modify the behavior of an object. The gist of the project is that a user is creating a job posting and at some point they will choose how they wish to publish the job: using a job credit, as a daily rate, on a recruiting plan, etc. The choice of publishable type alters the behavior of the job every time the user decides to change its status (from draft to open, draft to scheduled, open to closed). For example: when a job credit job is changed from draft status to open status the system has to verify that a credit is available and then use the credit on the job, but a daily rate job would instead charge the users credit card.</p>
 
 <p>You can imagine how this could lead to some pretty nasty code:</p>
 
-<pre><code class="language-javascript">public function open()
+<pre><code class="language-php">public function open()
 {
 	if ($this-&gt;publishable_type === 'credit') {
         // verify credit is available and anything else that 			
@@ -95,7 +96,7 @@
 
 <p>This implementation would result in the <code>open()</code> method being modified anytime a new publishable type is added. Similar methods would have to exist for the other job status changes as well. Not a maintainable approach. If we could abstract the behavior for each of the types into their own classes this method could be significantly improved. Consider if the open method could look like this instead:</p>
 
-<pre><code class="language-javascript">public function open()
+<pre><code class="language-php">public function open()
 {
 	$this-&gt;publishableType()-&gt;beforeOpen();
 
@@ -110,7 +111,7 @@
 
 <p>To make this work the <code>publishableType()</code> method needs to return a new instance of the type class.  We can take a cue from Laravel’s polymorphic relationships and save the namespace of the type class to a <code>publishable_type</code> column on the job table. Meaning that the column would contain something along the lines of: <code>App\Daily</code>, <code>App\Credit</code> or <code>App\Whatever</code>.  The <code>publishableType()</code> implementation looks like:</p>
 
-<pre><code class="language-javascript">public function publishableType()
+<pre><code class="language-php">public function publishableType()
 {
 	return new $this-&gt;publishable_type($this);
 }
@@ -119,6 +120,29 @@
 <p>And that is it. As long as each publishable type implements the same interface then changing the behavior of a job is a simple as persisting a different publishable type to the database.</p>
 
             </div>
+
+            <hr>
+
+            <div class="newsletter">
+                <h2>Like this post?</h2>
+                <p>Sign up to receive new posts in your inbox as soon as they are published.</p>
+                
+<div id="mc_embed_signup">
+    <form action="//joshforb.us15.list-manage.com/subscribe/post?u=f38411bc70c8873a964b33770&amp;id=9ecd49d69e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+        <div id="mc_embed_signup_scroll">
+            <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+            
+            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_f38411bc70c8873a964b33770_9ecd49d69e" tabindex="-1" value=""></div>
+            <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+        </div>
+    </form>
+</div>
+
+
+            </div>
+
+            <hr>
+
 
             
                 <h2>Comments</h2>
