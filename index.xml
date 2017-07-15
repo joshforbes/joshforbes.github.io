@@ -6,10 +6,20 @@
     <description>Recent content on joshforb.es</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 May 2017 21:43:12 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 14 Jul 2017 21:43:12 -0400</lastBuildDate>
     
 	<atom:link href="https://joshforb.es/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Model Factory States To Create Related Models</title>
+      <link>https://joshforb.es/post/model-factory-states/</link>
+      <pubDate>Fri, 14 Jul 2017 21:43:12 -0400</pubDate>
+      
+      <guid>https://joshforb.es/post/model-factory-states/</guid>
+      <description>Laravel’s model factories can be used to automatically create related models when the factory is called. This is a great way to DRY up the arrange portion of your tests. Consider the following factory definition:
+$factory-&amp;gt;define(Comment::class, function ($faker) { return [ &#39;post_id&#39; =&amp;gt; factory(Post::class)-&amp;gt;lazy(), &#39;content&#39; =&amp;gt; $faker-&amp;gt;sentence() ]; });  This factory will create a Comment along with a Post whenever it is called unless the Post is explicitly provided.</description>
+    </item>
     
     <item>
       <title>Persisting Polymorphism</title>

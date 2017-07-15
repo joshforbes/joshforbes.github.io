@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://joshforb.es/post/model-factory-states/</loc>
+    <lastmod>2017-07-14T21:43:12-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://joshforb.es/post/persisting-polymorphism/</loc>
     <lastmod>2017-05-01T21:43:12-04:00</lastmod>
   </url>
@@ -13,7 +18,7 @@
   
   <url>
     <loc>https://joshforb.es/post/</loc>
-    <lastmod>2017-05-01T21:43:12-04:00</lastmod>
+    <lastmod>2017-07-14T21:43:12-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -24,7 +29,7 @@
   
   <url>
     <loc>https://joshforb.es/</loc>
-    <lastmod>2017-05-01T21:43:12-04:00</lastmod>
+    <lastmod>2017-07-14T21:43:12-04:00</lastmod>
     <priority>0</priority>
   </url>
   
