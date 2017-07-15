@@ -9,8 +9,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@forbesdeveloper" />
     <meta name="twitter:title" content="Using Model Factory States To Create Related Models" />
-    <meta name="twitter:description" content="Laravel’s model factories can be used to automatically create related models when the factory is called. This is a great way to DRY up the arrange portion of your tests. Consider the following factory definition:
-$factory-&gt;define(Comment::class, function ($faker) { return [ &#39;post_id&#39; =&gt; factory(Post::class)-&gt;lazy(), &#39;content&#39; =&gt; $faker-&gt;sentence() ]; });  This factory will create a Comment along with a Post whenever it is called unless the Post is explicitly provided." />
+    <meta name="twitter:description" content="Laravel’s model factories can be used to automatically create related models when the factory is called. This is a great way to DRY up the arrange portion of your tests but can cause some problems. In this post we will examine how model factory states can be used to avoid any issues." />
     <meta name="twitter:url" content="https://joshforb.es/post/model-factory-states/" />
   
 
